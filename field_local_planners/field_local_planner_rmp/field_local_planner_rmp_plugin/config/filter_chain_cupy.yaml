@@ -1,0 +1,22 @@
+grid_map_filters:
+  # Subscribe direct to traversability layer from elevation_mapping_cupy
+
+  # Compute 2D Signed Distance Field
+  - name: sdf
+    type: gridMapFiltersDrs/SignedDistanceField2dFilter
+    params:
+      input_layer: traversability
+      output_layer: sdf
+      normalize_gradients: true
+      threshold: 0.1
+
+  - name: geodesic
+    type: gridMapFiltersDrs/GeodesicDistanceField2dFilter
+    params:
+      input_layer: traversability
+      output_layer: geodesic
+      normalize_gradients: true
+      attractor_topic: /field_local_planner/current_goal
+      threshold: 0.1 # to be applied to the input layer
+      use_field_smoothing: false
+      field_smoothing_radius: 0.1 # m

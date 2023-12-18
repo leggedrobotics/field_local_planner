@@ -33,7 +33,7 @@
   <include file="$(find grid_map_filters_drs)/launch/filter_chain.launch">
     <arg name="input_topic"           value="$(arg elevation_map_topic)"/>
     <arg name="output_topic"          value="$(arg elevation_map_filtered_topic)"/>
-    <arg name="filter_chain_config"   value="$(find field_local_planner_rmp_plugin)/config/filter_chain.yaml"/>
+    <arg name="filter_chain_config"   value="$(find field_local_planner_rmp_plugin)/config/filter_chain_cupy.yaml"/>
     <arg name="viz_config"            value="$(find field_local_planner_rmp_plugin)/config/filter_chain_visualizations.yaml"/>
     <arg name="viz"                   value="true"/>
   </include>
