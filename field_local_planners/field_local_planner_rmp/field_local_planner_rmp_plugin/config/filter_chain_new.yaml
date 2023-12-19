@@ -88,6 +88,7 @@ grid_map_filters:
       output_layer: cost
       expression: 10*(1.0 - traversability) + 1.0
 
+  # Until here compute the geometric traversability cost
   - name: geodesic
     type: gridMapFiltersDrs/GeodesicFieldFilter
     params:
