@@ -60,6 +60,8 @@ grid_map_filters:
       # expression: (0.5 * (1.0 - (slope / 0.6)) + 0.5 * height_traversability) .* (1.0 - unknown_space)
       expression: (0.5 * (1.0 - (slope / 0.6)) + 0.5 * height_traversability)
 
+  # Until here compute the geometric traversability cost
+
   # Compute 2D Signed Distance Field
   - name: sdf
     type: gridMapFiltersDrs/SignedDistanceField2dFilter
