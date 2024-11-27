@@ -78,6 +78,7 @@ install(
 ############
 catkin_install_python(PROGRAMS
     scripts/action_client.py
+    scripts/action_client_posestamped.py
     scripts/carrot_publisher.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
