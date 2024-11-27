@@ -267,8 +267,8 @@ void BasePlugin::odometryCallback(const nav_msgs::OdometryConstPtr& odo_msg) {
 }
 
 // Goal callback
-void BasePlugin::goalCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& goal_msg) {
-  setGoal(goal_msg->pose.pose, goal_msg->header);
+void BasePlugin::goalCallback(const geometry_msgs::PoseStampedConstPtr& goal_msg) {
+  setGoal(goal_msg->pose, goal_msg->header);
 }
 
 // Joystick callback

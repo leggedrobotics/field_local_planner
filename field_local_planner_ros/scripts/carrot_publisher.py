@@ -4,7 +4,7 @@ import rospy
 import rospkg
 from field_local_planner_msgs.msg import Status
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import PoseWithCovarianceStamped
+from geometry_msgs.msg import PoseStamped
 import tf.transformations as tr
 import math
 
@@ -27,7 +27,7 @@ class CarrotPublisher:
         # Set subscriber
         self.status_pub = rospy.Subscriber(self.status_topic, Status, self.status_callback, queue_size=10)
         self.status_pub = rospy.Subscriber(self.status_topic, Status, self.status_callback, queue_size=10)
-        self.goal_sub = rospy.Subscriber(self.goal_topic, PoseWithCovarianceStamped, self.goal_callback, queue_size=10)
+        self.goal_sub = rospy.Subscriber(self.goal_topic, PoseStamped, self.goal_callback, queue_size=10)
 
         # Set publisher
         self.carrot_pub = rospy.Publisher("/field_local_planner/real_carrot", Marker, queue_size=10)
@@ -60,11 +60,11 @@ class CarrotPublisher:
         except rospy.exceptions.ROSException:
             pass
 
-    def goal_callback(self, msg: PoseWithCovarianceStamped):
+    def goal_callback(self, msg: PoseStamped):
         t = msg.header.stamp.to_sec()
         yaw = math.fmod(self.carrot_rotation_freq * t, 2 * math.pi)
         q = tr.quaternion_about_axis(yaw, (0, 0, 1))
-        pose = msg.pose.pose
+        pose = msg.pose
 
         # Update the marker
         self.marker.header = msg.header

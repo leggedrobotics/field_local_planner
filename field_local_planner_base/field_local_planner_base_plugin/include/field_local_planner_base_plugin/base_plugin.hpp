@@ -69,7 +69,7 @@ class BasePlugin {
   void odometryCallback(const nav_msgs::OdometryConstPtr& odo_msg);
 
   // Other callbacks
-  void goalCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& goal_msg);
+  void goalCallback(const geometry_msgs::PoseStampedConstPtr& goal_msg);
   void joyTwistCallback(const geometry_msgs::TwistConstPtr& twist_msg);
   void moveToRequestActionHandler();
   void preemptActionHandler();
