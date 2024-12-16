@@ -125,7 +125,7 @@ void BasePlugin::setupBaseRos(ros::NodeHandle& nh) {
   goal_sub_ = nh.subscribe(std::string(goal_topic), 1, &BasePlugin::goalCallback, this);
 
   // Joystick command
-  std::string joy_twist_topic = utils::getParameterDefault(nh, "joy_twist_topic", std::string("/goal"));
+  std::string joy_twist_topic = utils::getParameterDefault(nh, "joy_twist_topic", std::string("/cmd_twist"));
   joy_twist_sub_ = nh.subscribe(std::string(joy_twist_topic), 1, &BasePlugin::joyTwistCallback, this);
 
   // Setup publishers
