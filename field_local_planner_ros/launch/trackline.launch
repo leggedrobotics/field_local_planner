@@ -20,7 +20,6 @@
     <arg name="goal_topic"         value="/initialpose"/>
     <arg name="joy_twist_topic"    value="/cmd_vel"/>
     <arg name="output_twist_type"  value="twist_stamped"/>
-    <!-- <arg name="output_twist_topic" value="/local_guidance_path_follower/twist"/> -->
     <arg name="output_twist_topic" value="/motion_reference/command_twist"/>
   </include>
 
