@@ -13,6 +13,8 @@
   <!-- Catkin packages -->
   <depend>field_local_planner_base_plugin</depend>
   <depend>field_local_planner_rmp_plugin</depend>
+  <depend>field_local_planner_msgs</depend>
+  <depend>move_base_msgs</depend>
   <depend>pluginlib</depend>
   <depend>roscpp</depend>
 

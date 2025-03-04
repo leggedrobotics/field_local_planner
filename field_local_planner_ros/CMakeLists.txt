@@ -80,5 +80,7 @@ catkin_install_python(PROGRAMS
     scripts/action_client.py
     scripts/action_client_posestamped.py
     scripts/carrot_publisher.py
+    scripts/move_base_bridge.py
+    scripts/move_base_simple.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

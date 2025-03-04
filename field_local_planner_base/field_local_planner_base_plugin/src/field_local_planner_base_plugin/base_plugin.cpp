@@ -1,3 +1,20 @@
+//----------------------------------------
+// This file is part of field_local_planner
+//
+// Copyright (C) 2020-2025 Matías Mattamala, University of Oxford.
+//
+// field_local_planner is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+// License as published by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// field_local_planner is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+// the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with field_local_planner.
+// If not, see <http://www.gnu.org/licenses/>.
+//
+//----------------------------------------
 #include <field_local_planner_base_plugin/base_plugin.hpp>
 
 namespace field_local_planner {
@@ -155,9 +172,7 @@ void BasePlugin::setupBaseRos(ros::NodeHandle& nh) {
   // Setup services
 
   // Setup action server
-  action_server_ = std::make_shared<ActionServer>(nh, "action_server", false);
-  action_server_->registerGoalCallback(boost::bind(&BasePlugin::moveToRequestActionHandler, this));
-  action_server_->registerPreemptCallback(boost::bind(&BasePlugin::preemptActionHandler, this));
+  action_server_ = std::make_shared<ActionServer>(nh, "action_server", boost::bind(&BasePlugin::executeActionCB, this, _1), false);
   action_server_->start();
 
   // Dynamic reconfigure
@@ -188,6 +203,8 @@ bool BasePlugin::execute(const ros::Time& stamp, geometry_msgs::Twist& twist_msg
     publishCurrentGoal(T_f_g_);
   }
 
+  status_msg = utils::toStatusMsg(output.status);
+  last_state_ = output.status.state;
   return valid_output;
 }
 
@@ -197,6 +214,7 @@ void BasePlugin::setPose(const geometry_msgs::Pose& pose_msg, const std_msgs::He
 
   // Get transformation if frames do not match: frame_id (auxiliary) in fixed_frame f
   Pose3 T_f_a = queryTransform(fixed_frame_, header.frame_id, header.stamp);
+  last_pose_stamp_ = header.stamp;
 
   // Transform message
   Pose3 T_a_b = utils::toPose3(pose_msg);                       // Transformation of base b in auxiliary frame
@@ -245,16 +263,17 @@ void BasePlugin::setGoal(const geometry_msgs::Pose& goal_msg, const std_msgs::He
   ROS_INFO_STREAM("Setting new goal in frame [" << fixed_frame_ << "] : \n  position: " << T_f_g_.translation().transpose()
                                                 << "\n  orientation (Euler): " << T_f_g_.rotation().rpy().transpose());
   local_planner_->setGoalInFixed(T_f_g_, T_f_b, ts);
+  last_state_ = BaseLocalPlanner::State::EXECUTING;
 }
 
 void BasePlugin::poseCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose_msg) {
   setPose(pose_msg->pose.pose, pose_msg->header);
 
-  // Execute local planner
-  geometry_msgs::Twist twist;
-  nav_msgs::Path path;
-  field_local_planner_msgs::Status status;
-  execute(pose_msg->header.stamp, twist, path, status);
+  // // Execute local planner
+  // geometry_msgs::Twist twist;
+  // nav_msgs::Path path;
+  // field_local_planner_msgs::Status status;
+  // execute(pose_msg->header.stamp, twist, path, status);
 }
 
 void BasePlugin::twistCallback(const geometry_msgs::TwistWithCovarianceStampedConstPtr& twist_msg) {
@@ -276,22 +295,35 @@ void BasePlugin::joyTwistCallback(const geometry_msgs::TwistConstPtr& twist_msg)
   ROS_FATAL("BasePlugin::joyTwistCallback: Not implemented");
 }
 
-// Action server
-void BasePlugin::moveToRequestActionHandler() {
+void BasePlugin::executeActionCB(const field_local_planner_msgs::MoveToGoalConstPtr &goal) {
   ROS_INFO_STREAM("[BasePlugin] Action Server - New goal");
 
-  // Get goal from server
-  geometry_msgs::PoseWithCovarianceStamped goal_msg = action_server_->acceptNewGoal()->goal;
-
-  // Pass goal to the local planner
+  geometry_msgs::PoseWithCovarianceStamped const& goal_msg = goal->goal;
   setGoal(goal_msg.pose.pose, goal_msg.header);
-}
 
-void BasePlugin::preemptActionHandler() {
-  ROS_INFO_STREAM("[BasePlugin] Action Server - Stop");
-  action_server_->setPreempted();
-  local_planner_->stop();
-  publishZeroTwist();
+  field_local_planner_msgs::Status status;
+  ros::Duration sleep_duration {0.2};
+  while (last_state_ == BaseLocalPlanner::State::EXECUTING || last_state_ == BaseLocalPlanner::State::NOT_READY) {
+    if (action_server_->isPreemptRequested() || !ros::ok()) {
+      ROS_INFO_STREAM("Action preempted!");
+      local_planner_->stop();
+      action_server_->setPreempted();
+      return;
+    }
+      // Execute local planner
+      geometry_msgs::Twist twist;
+      nav_msgs::Path path;
+      execute(last_pose_stamp_, twist, path, status);
+   
+    sleep_duration.sleep();
+  }
+  field_local_planner_msgs::MoveToResult result {};
+  result.status = status;
+  if (last_state_ == BaseLocalPlanner::State::FINISHED){ 
+    action_server_->setSucceeded(result);
+  } else {
+    action_server_->setAborted(result);
+  }
 }
 
 void BasePlugin::dynamicReconfigureCallback(BaseConfig& config, uint32_t level) {
@@ -495,8 +527,6 @@ void BasePlugin::printStateInfo(const BaseLocalPlanner::State& new_state) {
       ROS_WARN("Change to state: FAILURE (%d)", new_state);
     }
   }
-
-  last_state_ = new_state;
 }
 
 Pose3 BasePlugin::getBaseInversionTransform() const {
