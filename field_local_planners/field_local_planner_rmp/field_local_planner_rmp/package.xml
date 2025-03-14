@@ -16,7 +16,4 @@
   <depend>grid_map_core</depend>
   <depend>rmp</depend>
 
-  <!-- Non-catkin packages -->
-  <depend>gtsam</depend>
-
 </package>

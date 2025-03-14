@@ -15,7 +15,4 @@
   <depend>field_local_planner_base</depend>
   <depend>grid_map_core</depend>
 
-  <!-- Non-catkin packages -->
-  <depend>gtsam</depend>
-
 </package>

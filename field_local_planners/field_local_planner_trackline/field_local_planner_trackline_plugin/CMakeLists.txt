@@ -35,11 +35,6 @@ find_package(yaml-cpp REQUIRED)
 # OpenCV
 find_package(OpenCV REQUIRED)
 
-# GTSAM
-# find_package(GTSAMCMakeTools REQUIRED)
-set(GTSAM_BUILD_WITH_MARCH_NATIVE OFF CACHE BOOL "Enable/Disable building with all instructions supported by native architecture (binary may not be portable!)" FORCE)
-find_package(GTSAM REQUIRED)
-
 # PCL
 set(PCL_FIND_QUIETLY ON)
 find_package(PCL REQUIRED
@@ -73,7 +68,6 @@ catkin_package(
 include_directories(
   include
   SYSTEM
-    ${GTSAM_INCLUDE_DIRS}
     ${catkin_INCLUDE_DIRS}
     ${PCL_INCLUDE_DIRS}
 )
@@ -85,14 +79,12 @@ add_library(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
   SYSTEM PUBLIC
-    ${GTSAM_INCLUDE_DIRS}
     ${catkin_INCLUDE_DIRS}
     ${PCL_INCLUDE_DIRS}
 )
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
-  gtsam
   ${OpenCV_LIBRARIES}
 )
 
