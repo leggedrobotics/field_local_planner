@@ -20,3 +20,14 @@ grid_map_filters:
       threshold: 0.1 # to be applied to the input layer
       use_field_smoothing: false
       field_smoothing_radius: 0.1 # m
+
+  # - name: potential_goal_field
+  # type: gridMapFiltersDrs/PotentialGoalFieldFilter
+  # params:
+  #   input_layer: traversability
+  #   output_layer: potential_goal_field
+  #   # normalize_gradients: true
+  #   attractor_topic: /global_planning/path
+  #   threshold: 0.1 # to be applied to the input layer
+  #   # use_field_smoothing: false
+  #   # field_smoothing_radius: 0.1 # m
