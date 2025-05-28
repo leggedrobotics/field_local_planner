@@ -24,9 +24,6 @@ find_package(catkin REQUIRED
     ${CATKIN_PACKAGE_LIST}
 )
 
-set(GTSAM_BUILD_WITH_MARCH_NATIVE OFF CACHE BOOL "Enable/Disable building with all instructions supported by native architecture (binary may not be portable!)" FORCE)
-find_package(GTSAM REQUIRED)
-
 # Libraries dependencies
 # configure catkin package
 catkin_package(
@@ -40,7 +37,6 @@ catkin_package(
 include_directories(
   SYSTEM
     ${catkin_INCLUDE_DIRS}
-    ${GTSAM_INCLUDE_DIRS}
 )
 
 # Declare node
@@ -49,7 +45,6 @@ add_executable(field_local_planner_node
 
 target_link_libraries(field_local_planner_node
                       ${catkin_LIBRARIES}
-                      gtsam
 )
 
 #############

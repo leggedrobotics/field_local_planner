@@ -10,5 +10,5 @@
 
   <license>TODO</license>
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>gtsam</depend>
+  <depend>gtsam_catkin</depend>
 </package>
