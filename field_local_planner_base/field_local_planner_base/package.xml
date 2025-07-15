@@ -13,6 +13,8 @@
 
   <!-- Catkin packages -->
   <depend>grid_map_core</depend>
+
+  <!-- Non-catkin packages -->
   <depend>gtsam_catkin</depend>
 
 </package>

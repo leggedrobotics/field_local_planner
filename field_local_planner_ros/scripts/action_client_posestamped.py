@@ -32,7 +32,7 @@ class ActionClient:
         goal.goal.pose.pose = msg.pose
         goal.goal.header = msg.header
 
-        rospy.loginfo(f"Sending new goal:\n{goal.goal}")
+        # rospy.loginfo(f"Sending new goal:\n{goal.goal}")
         self.client.send_goal(goal)
 
 if __name__ == "__main__":
