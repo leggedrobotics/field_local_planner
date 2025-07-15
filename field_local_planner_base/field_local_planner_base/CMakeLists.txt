@@ -15,6 +15,7 @@ endif()
 
 set(CATKIN_PACKAGE_LIST
   grid_map_core
+  gtsam_catkin
 )
 
 find_package(catkin REQUIRED COMPONENTS
@@ -27,11 +28,6 @@ find_package(yaml-cpp REQUIRED)
 
 # OpenCV
 find_package(OpenCV REQUIRED)
-
-# GTSAM
-# find_package(GTSAMCMakeTools REQUIRED)
-# set(GTSAM_BUILD_WITH_MARCH_NATIVE OFF CACHE BOOL "Enable/Disable building with all instructions supported by native architecture (binary may not be portable!)" FORCE)
-find_package(GTSAM REQUIRED)
 
 # PCL
 set(PCL_FIND_QUIETLY ON)
@@ -64,7 +60,6 @@ include_directories(
   include
   SYSTEM
     ${catkin_INCLUDE_DIRS}
-    ${GTSAM_INCLUDE_DIRS}
     ${PCL_INCLUDE_DIRS}
 )
 
@@ -79,7 +74,6 @@ target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${OpenCV_LIBS}
   ${PCL_LIBRARIES}
-  gtsam
   ${YAML_CPP_LIBRARIES}
 )
 
