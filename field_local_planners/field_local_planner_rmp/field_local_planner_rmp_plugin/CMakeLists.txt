@@ -30,7 +30,6 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # Libraries dependencies
-
 # Dynamic reconfigure
 generate_dynamic_reconfigure_options(dynamic_reconfigure/Rmp.cfg)
 
