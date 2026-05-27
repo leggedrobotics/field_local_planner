@@ -25,6 +25,7 @@
 #include <gtsam/geometry/Point2.h>
 #include <gtsam/slam/expressions.h>
 #include <iostream>
+#include <optional>
 
 namespace gtsam {
 
@@ -47,7 +48,7 @@ class GTSAM_EXPORT DifferentialModel {
 
   DifferentialModel(const Pose2& state);
 
-  Vector3 apply(const Vector2& acceleration, OptionalJacobian<3, 1> Hmodel = boost::none, OptionalJacobian<3, 2> Hacc = boost::none) const;
+  Vector3 apply(const Vector2& acceleration, OptionalJacobian<3, 1> Hmodel = std::nullopt, OptionalJacobian<3, 2> Hacc = std::nullopt) const;
 
   Matrix3 applyMetric(const Matrix2& metric) const { return J_ * metric * J_.transpose(); }
 

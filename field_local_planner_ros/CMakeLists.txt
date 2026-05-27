@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(field_local_planner_ros)
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(DEFAULT_BUILD "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)

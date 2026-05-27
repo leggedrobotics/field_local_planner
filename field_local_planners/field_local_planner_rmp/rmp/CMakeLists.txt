@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(rmp)
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CATKIN_PACKAGE_DEPENDENCIES
   gtsam_catkin

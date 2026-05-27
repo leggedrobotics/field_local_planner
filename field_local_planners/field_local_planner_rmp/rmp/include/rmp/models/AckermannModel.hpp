@@ -25,6 +25,7 @@
 #include <gtsam/geometry/Point2.h>
 #include <gtsam/slam/expressions.h>
 #include <iostream>
+#include <optional>
 
 /** Ackermann Model
  *  X. Meng, N. Ratliff, Y. Xiang, and D. Fox,
@@ -60,7 +61,7 @@ class GTSAM_EXPORT AckermannModel {
 
   void precomputeModel();
 
-  Vector3 apply(const Vector2& acceleration, OptionalJacobian<3, 5> Hmodel = boost::none, OptionalJacobian<3, 2> Hacc = boost::none) const;
+  Vector3 apply(const Vector2& acceleration, OptionalJacobian<3, 5> Hmodel = std::nullopt, OptionalJacobian<3, 2> Hacc = std::nullopt) const;
 
   // Elements
   inline double v() const { return v_; }

@@ -27,6 +27,8 @@
 #include <rmp/models/ControlPoint.hpp>
 #include <rmp/models/DifferentialModel.hpp>
 
+#include <optional>
+
 namespace gtsam {
 namespace rmp {
 
@@ -35,7 +37,7 @@ using ControlPoint2_ = Expression<ControlPoint2>;
 
 template <class ACC>
 inline Vector2 applyControlPoint2Helper(const ControlPoint2& control_point, const ACC& acceleration,
-                                        OptionalJacobian<2, 2> Hmodel = boost::none, OptionalJacobian<2, 3> Hacc = boost::none) {
+                                        OptionalJacobian<2, 2> Hmodel = std::nullopt, OptionalJacobian<2, 3> Hacc = std::nullopt) {
   return control_point.apply(acceleration, Hmodel, Hacc);
 }
 
@@ -48,8 +50,8 @@ Vector2_ pullback(const Expression<ControlPoint2>& model_, const Expression<ACC>
 using AckermannModel_ = Expression<AckermannModel>;
 
 template <class ACC>
-inline Vector3 applyAckermannModelHelper(const AckermannModel& model, const ACC& acceleration, OptionalJacobian<3, 5> Hmodel = boost::none,
-                                         OptionalJacobian<3, 2> Hacc = boost::none) {
+inline Vector3 applyAckermannModelHelper(const AckermannModel& model, const ACC& acceleration, OptionalJacobian<3, 5> Hmodel = std::nullopt,
+                                         OptionalJacobian<3, 2> Hacc = std::nullopt) {
   return model.apply(acceleration, Hmodel, Hacc);
 }
 
@@ -63,7 +65,7 @@ using DifferentialModel_ = Expression<DifferentialModel>;
 
 template <class ACC>
 inline Vector3 applyDifferentialModelHelper(const DifferentialModel& model, const ACC& acceleration,
-                                            OptionalJacobian<3, 1> Hmodel = boost::none, OptionalJacobian<3, 2> Hacc = boost::none) {
+                                            OptionalJacobian<3, 1> Hmodel = std::nullopt, OptionalJacobian<3, 2> Hacc = std::nullopt) {
   return model.apply(acceleration, Hmodel, Hacc);
 }
 
